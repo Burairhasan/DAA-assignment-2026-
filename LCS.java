@@ -1,39 +1,42 @@
 public class Main {
-    public static void main(String[] args) {
-        String S1 = "Your Complete Name Here"; // Replace with your name
-        String S2 = "ETAOINSHR";
-        
-        int m = S1.length();
-        int n = S2.length();
-        int[][] L = new int[m+1][n+1];
-        
+    public static void findLCS(String s1, String s2) {
+        int m = s1.length();
+        int n = s2.length();
+        int[][] dp = new int[m + 1][n + 1];
+
         for (int i = 0; i <= m; i++) {
             for (int j = 0; j <= n; j++) {
-                if (i == 0 || j == 0) {
-                    L[i][j] = 0;
-                } else if (S1.charAt(i-1) == S2.charAt(j-1)) {
-                    L[i][j] = L[i-1][j-1] + 1;
-                } else {
-                    L[i][j] = Math.max(L[i-1][j], L[i][j-1]);
-                }
+                if (i == 0 || j == 0)
+                    dp[i][j] = 0;
+                else if (s1.charAt(i - 1) == s2.charAt(j - 1))
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                else
+                    dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
             }
         }
-        
-        // Reconstruct LCS
-        StringBuilder lcs = new StringBuilder();
+
+        int index = dp[m][n];
+        char[] lcs = new char[index];
         int i = m, j = n;
         while (i > 0 && j > 0) {
-            if (S1.charAt(i-1) == S2.charAt(j-1)) {
-                lcs.append(S1.charAt(i-1));
-                i--; j--;
-            } else if (L[i-1][j] > L[i][j-1]) {
+            if (s1.charAt(i - 1) == s2.charAt(j - 1)) {
+                lcs[index - 1] = s1.charAt(i - 1);
+                i--; j--; index--;
+            } else if (dp[i - 1][j] > dp[i][j - 1])
                 i--;
-            } else {
+            else
                 j--;
-            }
         }
+
+        System.out.println("string 1 (name): " + s1);
+        System.out.println("string 2 (key):  " + s2);
+        System.out.println("LCS length: " + dp[m][n]);
+        System.out.print("LCS string: ");
+        System.out.println(String.valueOf(lcs));
+    }
+
+    public static void main(String[] args) {
         
-        System.out.println("Length of LCS: " + L[m][n]);
-        System.out.println("LCS: " + lcs.reverse());
+        findLCS("Burair Hassan", "hahadb");
     }
 }
